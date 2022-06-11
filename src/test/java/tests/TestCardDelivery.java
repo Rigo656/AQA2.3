@@ -1,8 +1,13 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import date.DataGenerator;
 import date.RegistrationByCardInfo;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -20,12 +25,25 @@ import static date.DataGenerator.generateDate;
 
 public class TestCardDelivery {
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @BeforeEach
+    void setUp() {
+        open("http://localhost:7777");
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     @Test
     void shouldSuccessfulCardOrder() {
         String planningDate = DataGenerator.generateDate(15);
         String RedevelopedDate = DataGenerator.generateDate(20);
-
-        open("http://localhost:9999");
 
         RegistrationByCardInfo firstMeeting = DataGenerator.Registration.generateByCard("ru");
         Configuration.holdBrowserOpen = true;
